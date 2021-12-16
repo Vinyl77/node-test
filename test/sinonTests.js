@@ -8,14 +8,27 @@ var chai = require('chai'),
 chai.should()
 
 describe('sinon tests', function(){
-    var student
+    var student, schedule
 
     beforeEach(function(){
         student = {
             dropClass: function(classId, cb){
                 // do stuff
-                cb()
+                if(!!cb.dropClass){
+                    cb.dropClass()
+                } else {
 
+                    cb()
+
+                }
+          
+
+            }
+        }
+
+        schedule = {
+            dropClass: function(){
+                console.log('class dropped')
             }
         }
     })
@@ -35,6 +48,13 @@ describe('sinon tests', function(){
             var spy = sinon.spy(onClassDropped)
             student.dropClass(1, spy)
             spy.called.should.be.true
+        })
+
+        it('should call the callback even if it\'s a method of on object', function(){
+            
+            sinon.spy(schedule, 'dropClass')
+            student.dropClass(1, schedule)
+            schedule.dropClass.called.should.be.true
         })
     })
 
