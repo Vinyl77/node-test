@@ -21,7 +21,14 @@ describe('sinon tests', function(){
                     cb()
 
                 }
-          
+            },
+            addClass: function(schedule){
+                if(!schedule.classIsFull()){
+                    // do stuff
+                    return true
+                }else{
+                    return false
+                }
 
             }
         }
@@ -29,6 +36,9 @@ describe('sinon tests', function(){
         schedule = {
             dropClass: function(){
                 console.log('class dropped')
+            },
+            classIsFull: function(){
+
             }
         }
     })
@@ -55,6 +65,31 @@ describe('sinon tests', function(){
             sinon.spy(schedule, 'dropClass')
             student.dropClass(1, schedule)
             schedule.dropClass.called.should.be.true
+        })
+    })
+
+    describe('student with stubs', function(){
+        it('should call stub method', function(){
+        var stub = sinon.stub(schedule)
+        student.dropClass(1, stub)
+        stub.dropClass.called.should.be.true
+        })
+        it('should return true when the class is not full', function(){
+            var stub = sinon.stub(schedule)
+            stub.classIsFull.returns(false)
+            var returnVal = student.addClass(stub)
+            returnVal.should.be.true
+        })
+    })
+
+    describe('student with mocks', function(){
+        it('mocks schedule', function(){
+            var mockObj = sinon.mock(schedule)
+            var expectation = mockObj.expects('classIsFull').once()
+
+            student.addClass(schedule)
+            expectation.verify()
+
         })
     })
 

@@ -43,7 +43,7 @@ var chai = require('chai'),
           num.should.equal(10)
       })
 
-      xit('should be twelve when add 7 to 5', function(){
+      it('should be twelve when add 7 to 5', function(){
           add(num, 7).should.equal(12)
       })
   })
